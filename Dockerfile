@@ -1,0 +1,31 @@
+FROM ubuntu:16.04
+
+ARG KUBESPRAY_VERSION=2.3.0
+ARG TERRAFORM_VERSION=0.9.3
+ARG HELM_VERSION=2.8.1
+
+WORKDIR cloud-deploy
+
+RUN apt-get update -y && apt-get install --no-install-recommends -y software-properties-common wget python-pip python-dev \
+    python-netaddr unzip gcc openssh-client curl && \
+    add-apt-repository -y ppa:ansible/ansible-2.4 && \
+    apt-get update -y && apt-get install --no-install-recommends -y git ansible  && \
+    wget https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_$TERRAFORM_VERSION\_linux_amd64.zip && \
+    unzip terraform_$TERRAFORM_VERSION\_linux_amd64.zip && mv terraform /usr/local/bin && \
+    rm terraform_$TERRAFORM_VERSION\_linux_amd64.zip && \
+    pip install -U pip && pip install python-glanceclient==2.9.1 && pip install shade==1.26.0 && pip install Jinja2==2.9.6 && \
+    wget https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubectl && chmod u+x kubectl && \
+    mv kubectl /usr/local/bin && \
+    wget https://storage.googleapis.com/kubernetes-helm/helm-v$HELM_VERSION-linux-amd64.tar.gz && \
+    tar -zxvf helm-v$HELM_VERSION-linux-amd64.tar.gz && mv linux-amd64/helm /usr/local/bin/helm && rm -rf helm-v$HELM_VERSION-linux-amd64.tar.gz && \
+    rm -rf linux-amd64 && \
+    wget https://github.com/kubernetes-incubator/kubespray/archive/v$KUBESPRAY_VERSION.zip && unzip v$KUBESPRAY_VERSION.zip && \
+    rm -f kubespray v$KUBESPRAY_VERSION.zip && \
+    ln -s kubespray-$KUBESPRAY_VERSION kubespray && \
+    apt-get purge -y python-dev gcc unzip wget && \
+    apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+
+# Removes RBAC check on 2.3.0
+RUN sed -i 's/.*rbac_enabled.*//' kubespray/roles/kubernetes/preinstall/tasks/verify-settings.yml
+

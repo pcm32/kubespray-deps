@@ -1,7 +1,8 @@
 FROM ubuntu:16.04
 
-ARG KUBESPRAY_VERSION=2.3.0
-ARG TERRAFORM_VERSION=0.9.3
+ARG KUBESPRAY_REVISION=53596112b39c27268878da6e2c9167058c2f4d2b
+ARG KUBESPRAY_REPO=pcm32/kubespray
+ARG TERRAFORM_VERSION=0.11.5
 ARG HELM_VERSION=2.8.1
 
 WORKDIR cloud-deploy
@@ -19,9 +20,9 @@ RUN apt-get update -y && apt-get install --no-install-recommends -y software-pro
     wget https://storage.googleapis.com/kubernetes-helm/helm-v$HELM_VERSION-linux-amd64.tar.gz && \
     tar -zxvf helm-v$HELM_VERSION-linux-amd64.tar.gz && mv linux-amd64/helm /usr/local/bin/helm && rm -rf helm-v$HELM_VERSION-linux-amd64.tar.gz && \
     rm -rf linux-amd64 && \
-    wget https://github.com/kubernetes-incubator/kubespray/archive/v$KUBESPRAY_VERSION.zip && unzip v$KUBESPRAY_VERSION.zip && \
-    rm -f kubespray v$KUBESPRAY_VERSION.zip && \
-    ln -s kubespray-$KUBESPRAY_VERSION kubespray && \
+    wget https://github.com/$KUBESPRAY_REPO/archive/$KUBESPRAY_REVISION.zip && unzip $KUBESPRAY_REVISION.zip && \
+    rm -f kubespray $KUBESPRAY_REVISION.zip && \
+    ln -s kubespray-$KUBESPRAY_REVISION kubespray && \
     apt-get purge -y python-dev gcc unzip wget && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

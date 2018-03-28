@@ -27,6 +27,4 @@ RUN apt-get update -y && apt-get install --no-install-recommends -y software-pro
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
-# Removes RBAC check on 2.3.0
-RUN sed -i 's/.*rbac_enabled.*//' kubespray/roles/kubernetes/preinstall/tasks/verify-settings.yml
 

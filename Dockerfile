@@ -14,7 +14,7 @@ RUN apt-get update -y && apt-get install --no-install-recommends -y software-pro
     wget https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_$TERRAFORM_VERSION\_linux_amd64.zip && \
     unzip terraform_$TERRAFORM_VERSION\_linux_amd64.zip && mv terraform /usr/local/bin && \
     rm terraform_$TERRAFORM_VERSION\_linux_amd64.zip && \
-    pip install -U pip && pip install python-glanceclient==2.9.1 && pip install shade==1.26.0 && pip install Jinja2==2.9.6 && \
+    pip install --upgrade pip==9.0.3 && pip install python-glanceclient==2.9.1 && pip install shade==1.26.0 && pip install Jinja2==2.9.6 && \
     wget https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubectl && chmod u+x kubectl && \
     mv kubectl /usr/local/bin && \
     wget https://storage.googleapis.com/kubernetes-helm/helm-v$HELM_VERSION-linux-amd64.tar.gz && \
